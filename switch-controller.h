@@ -10,6 +10,7 @@
 
 byte mac[] = {  0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xED };
 IPAddress controllerIp(192, 168, 178, 150);
+IPAddress relaisControllerIp(192, 168, 178, 151);
 IPAddress mqttServerIp(192, 168, 178, 73);
 long lastReconnectAttempt = 0;
 

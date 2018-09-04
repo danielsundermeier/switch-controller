@@ -16,6 +16,11 @@ void Switch::setPin(uint8_t pin)
     _topic = "switch-controller-1/" + String(_pin) + "/";
 }
 
+void Switch::setRelaisPin(uint8_t pin)
+{
+    _relaisPin = pin;
+}
+
 int Switch::getEvent()
 {
     int event = 0;
@@ -123,6 +128,11 @@ void Switch::longHold()
 void Switch::handleClick(unsigned short int eventType)
 {
     Serial.println("Button " + String(_pin) + " " + EVENT_TYPES[eventType]);
+    if (_relaisPin > 0)
+    {
+        // Send to Relais-Controller
+        Serial.println(String(relaisControllerIp[0]) + "." + String(relaisControllerIp[1]) + "." + String(relaisControllerIp[2]) + "." + String(relaisControllerIp[3]));
+    }
     publish(eventType);
 }
 

@@ -24,9 +24,11 @@ class Switch
         Switch(uint8_t pin);
         void check();
         void setPin(uint8_t pin);
+        void setRelaisPin(uint8_t pin);
     private:
         String _topic;
         uint8_t _pin;
+        uint8_t _relaisPin = 0;
         Bounce _bouncer;
         boolean DCwaiting = false; // whether we're waiting for a double click (down)
         boolean DConUp = false; // whether to register a double click on next release, or whether to wait and click
@@ -47,5 +49,6 @@ class Switch
 };
 
 extern PubSubClient mqttClient;
+extern IPAddress relaisControllerIp;
 
 #endif
