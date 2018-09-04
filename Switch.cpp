@@ -12,8 +12,8 @@ void Switch::setPin(uint8_t pin)
     _bouncer = Bounce();
     _bouncer.attach(pin, INPUT_PULLUP);
     _bouncer.interval(BOUNCER_INTERVAL);
-
     _pin = pin;
+    _topic = "switch-controller-1/" + String(_pin) + "/";
 }
 
 int Switch::getEvent()
@@ -102,20 +102,33 @@ void Switch::check()
 
 void Switch::click()
 {
-    Serial.println("Button " + String(_pin) + " clickEvent");
+    handleClick(EVENT_CLICK);
 }
 
 void Switch::doubleClick()
 {
-    Serial.println("Button " + String(_pin) + " doubleClickEvent");
+    handleClick(EVENT_DOUBLECLICK);
 }
 
 void Switch::hold()
 {
-    Serial.println("Button " + String(_pin) + " holdEvent");
+    handleClick(EVENT_HOLD);
 }
 
 void Switch::longHold()
 {
-    Serial.println("Button " + String(_pin) + " longHoldEvent");
+    handleClick(EVENT_LONGHOLD);
+}
+
+void Switch::handleClick(unsigned short int eventType)
+{
+    Serial.println("Button " + String(_pin) + " " + EVENT_TYPES[eventType]);
+    publish(eventType);
+}
+
+void Switch::publish(unsigned short int eventType)
+{
+    String topic = _topic + EVENT_TYPES[eventType];
+    Serial.println(topic);
+    mqttClient.publish(topic.c_str(), "ON");
 }

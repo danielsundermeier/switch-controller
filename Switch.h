@@ -3,15 +3,18 @@
 
 #include "Arduino.h"
 #include "Bounce2.h"
+#include "PubSubClient.h"
 
 #define DC_GAP 250
 #define HOLDTIME 2000
 #define LONGHOLDTIME 5000
 
-#define EVENT_CLICK 1
-#define EVENT_DOUBLECLICK 2
-#define EVENT_HOLD 3
-#define EVENT_LONGHOLD 4
+const short int EVENT_CLICK = 1;
+const short int EVENT_DOUBLECLICK = 2;
+const short int EVENT_HOLD = 3;
+const short int EVENT_LONGHOLD =4;
+
+const String EVENT_TYPES[5] = {"", "click", "doubleclick", "hold", "longhold"};
 
 class Switch
 {
@@ -22,6 +25,7 @@ class Switch
         void check();
         void setPin(uint8_t pin);
     private:
+        String _topic;
         uint8_t _pin;
         Bounce _bouncer;
         boolean DCwaiting = false; // whether we're waiting for a double click (down)
@@ -38,6 +42,10 @@ class Switch
         void doubleClick();
         void hold();
         void longHold();
+        void handleClick(unsigned short int eventType);
+        void publish(unsigned short int eventType);
 };
+
+extern PubSubClient mqttClient;
 
 #endif
